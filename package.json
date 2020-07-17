@@ -1,0 +1,20 @@
+{
+  "name": "msg-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for MSG server",
+  "main": "index.ts",
+  "scripts": {
+    "test": "ts-node-dev --respawn --transpileOnly ./index.ts"
+  },
+  "keywords": [
+    "Discord"
+  ],
+  "author": "Micah Henney",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.0.20",
+    "discord.js": "^12.2.0",
+    "node-fetch": "^2.6.0",
+    "typescript": "^3.9.6"
+  }
+}
