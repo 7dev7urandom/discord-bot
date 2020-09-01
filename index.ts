@@ -125,6 +125,7 @@ client.on("message", async message => {
                 sentMessage.react(reaction.trim());
             })
         });
+        message.delete();
     }
 });
 client.login('NzMwNzc4MDc0MjYxNDg3NzQ4.Xwce3w.N98cXlCAmoJL0dIToJFRoOO5qQE');
