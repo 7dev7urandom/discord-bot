@@ -1,9 +1,11 @@
-import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel } from 'discord.js'; 
+import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild } from 'discord.js'; 
 const client = new Client();
 client.once('ready', () => {
     console.log("Client ready!");
+    mainGuild = client.guilds.cache.get('710742381409861642'); // MSG students
 });
 var messageJson: any = {};
+var mainGuild: Guild | undefined;
 client.on("message", async message => {
     // console.log("message: " + message.content);
     if(message.content.startsWith("!export")) {
@@ -162,7 +164,21 @@ client.on("message", async message => {
             return;
         }
         message.reply("Missing parameter. Syntax: `!purge <<numberOfMessages>|<username>|all> [numberOfMessages]`");
+    } else if (message.content.startsWith('!aaa')) {
+        message.delete();
+        message.reply("You found the secret easter egg! You now have the rainbow role.");
+        message.member?.roles.add('750606553177915443');
     }
+});
+var colors = ['750606609574658058', '750606768354361356', '750606770497519647', '750606837455388713', '750606866165399565'];
+setInterval(async () => {
+    [... (await mainGuild?.roles.cache.get('750606553177915443')?.members.array() || [])].forEach(member => {
+        colors.forEach(color => member.roles.remove(color));
+        member.roles.add(colors[Math.floor(Math.random() * colors.length)]);
+    });
+}, 300000);
+client.on('messageReactionAdd', (reaction, user) => {
+    
 });
 function getUserFromMention(mention: string) {
 	if (!mention) return;
