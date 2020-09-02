@@ -126,6 +126,55 @@ client.on("message", async message => {
             })
         });
         message.delete();
+    } else if (message.content.startsWith('!purge')) {
+        if(!message.member?.hasPermission('MANAGE_MESSAGES')) {
+            message.reply("You do not have permission to do that!");
+            return;
+        };
+        let split = message.content.split(' ');
+        split.shift();
+        if (split.length == 1 && split[0] == "all") {
+            const channel = message.channel;
+            let messages;
+            while((await channel.messages.fetch()).array().length > 0) {
+                channel.bulkDelete(100);
+            }
+            message.reply("All messages have been purged!");
+            return;
+        }
+        let num;
+        if(!isNaN(parseInt(split[0]))) {
+            num = parseInt(split[0]) + 1;
+            message.channel.bulkDelete(num);
+            message.reply("Deleted " + num + " messages!");
+            return;
+        }
+        let user = getUserFromMention(split[0])
+        if(user) {
+            message.reply("This has not been implemented yet. Sorry!");
+            return;
+            if(split.length > 1) {
+                num = parseInt(split[1]);
+            } else {
+                num = 100;
+            }
+
+            return;
+        }
+        message.reply("Missing parameter. Syntax: `!purge <<numberOfMessages>|<username>|all> [numberOfMessages]`");
     }
 });
+function getUserFromMention(mention: string) {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		mention = mention.slice(2, -1);
+
+		if (mention.startsWith('!')) {
+			mention = mention.slice(1);
+		}
+
+		return client.users.cache.get(mention);
+	}
+}
 client.login('NzMwNzc4MDc0MjYxNDg3NzQ4.Xwce3w.N98cXlCAmoJL0dIToJFRoOO5qQE');
