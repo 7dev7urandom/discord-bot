@@ -180,6 +180,17 @@ setInterval(async () => {
 client.on('messageReactionAdd', (reaction, user) => {
     
 });
+client.on('messageDelete', async message => {
+    const channel: TextChannel = <TextChannel> await client.channels.fetch('751349307382431845');
+    const logMessage = new MessageEmbed()
+        .setTitle("Message deleted in #" + (<TextChannel>message.channel).name)
+        .setAuthor(message.author?.username + '#' + message.author?.discriminator, message.author?.avatarURL() || undefined)
+        .setDescription(message.content)
+        .setTimestamp(new Date())
+        .setColor('#de6053')
+        .setFooter("ID: " + message.id);
+    channel.send(logMessage);
+});
 function getUserFromMention(mention: string) {
 	if (!mention) return;
 
