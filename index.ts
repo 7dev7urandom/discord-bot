@@ -136,6 +136,10 @@ client.on("message", async message => {
         let split = message.content.split(' ');
         split.shift();
         if (split.length == 1 && split[0] == "all") {
+            if(!message.member.hasPermission('ADMINISTRATOR')) {
+                message.reply("Only administrators can clear whole channels!");
+                return;
+            }
             const channel = message.channel;
             let messages;
             while((await channel.messages.fetch()).array().length > 0) {
