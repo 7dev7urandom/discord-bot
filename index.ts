@@ -1,4 +1,4 @@
-import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild } from 'discord.js'; 
+import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild, PermissionOverwrites } from 'discord.js'; 
 const client = new Client();
 client.once('ready', () => {
     console.log("Client ready!");
@@ -103,7 +103,7 @@ client.on("message", async message => {
             const attachment = new MessageAttachment(buf, "messages.json");
             message.channel.send("Export complete! Here is the data", attachment);
         } else {
-            message.reply("Sorry, only users with the Admin role can use this feature.")
+            message.reply("Sorry, only Administrators can use this feature.")
         }
     } else if (message.content.startsWith('!poll')) {
         const pollsChannel = await client.channels.cache.get('733177335301406791');
@@ -172,7 +172,45 @@ client.on("message", async message => {
         message.delete();
         message.reply("You found the secret easter egg! You now have the rainbow role.");
         message.member?.roles.add('750606553177915443');
+    } else if (message.content.startsWith('!disable')) {
+        message.guild?.channels.cache.forEach(channel => {
+            // if(channel.type !== "text" || !channel.parentID || channel.parentID !== '710742381409861643') return;
+            // if(channel.id !== '710742381409861645') return;
+            if ((channel.type !== 'category' || channel.id !== '710742381409861643') && channel.id !== '710742381409861645' && channel.id !== '753468247948656671') return;
+            channel.updateOverwrite('749869767527104513', { SEND_MESSAGES: false }, 'Disabling message send abilities for people who should be in school');
+        });
+    } else if (message.content.startsWith('!enable')) {
+        message.guild?.channels.cache.forEach(channel => {
+            // if(channel.type !== "text" || !channel.parentID || channel.parentID !== '710742381409861643') return;
+            // if(channel.id !== '710742381409861645') return;
+            if ((channel.type !== 'category' || channel.id !== '710742381409861643') && channel.id !== '710742381409861645' && channel.id !== '753468247948656671') return;
+            channel.updateOverwrite('749869767527104513', { SEND_MESSAGES: null }, 'Enabling message send abilities for school people');
+        });
     }
+    // } else if (message.content.startsWith('!pol2')) {
+    //     const pollsChannel = await client.channels.cache.get('749870145962508349');
+    //     if(!pollsChannel) return;
+    //     let args = message.content.split("=");
+    //     if(args.length < 3) {
+    //         message.reply("The syntax for this command is `!poll=<possible-reactions-seperated-by-commas>=<text>`\nExample:\n `!poll=👍,👎=Is MSG Bot awesome?` ");
+    //         return;
+    //     }
+    //     args.shift();
+    //     let reactions = args.shift()?.split(",");
+    //     let polltext = args.join("=");
+    //     const messageToSend = new MessageEmbed()
+    //     .setColor('#caed05')
+    //     .setTitle(`Poll by ${message.member?.displayName}:`)
+    //     .setDescription(polltext);
+    //     console.log("Adding poll: " + polltext);
+    //     //@ts-ignore
+    //     pollsChannel.send(messageToSend).then(sentMessage => {
+    //         reactions?.forEach(reaction => {
+    //             sentMessage.react(reaction.trim());
+    //         })
+    //     });
+    //     message.delete();
+    // }
 });
 var colors = ['750606609574658058', '750606768354361356', '750606770497519647', '750606837455388713', '750606866165399565'];
 setInterval(async () => {
