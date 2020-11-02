@@ -8,6 +8,7 @@ var messageJson: any = {};
 var mainGuild: Guild | undefined;
 client.on("message", async message => {
     // console.log("message: " + message.content);
+    if(message.guild === mainGuild) return;
     if(message.content.startsWith("!export")) {
         if (message.member?.roles.cache.has('710759824396255252')) {
             message.channel.send(`Message export requested by ${message.member?.displayName}. Messages exporting!`);
@@ -220,9 +221,12 @@ setInterval(async () => {
     });
 }, 300000);
 client.on('messageReactionAdd', (reaction, user) => {
-    
+    if(reaction.message.guild === mainGuild) return;
+
 });
 client.on('messageDelete', async message => {
+    if(message.guild === mainGuild) return;
+
     const channel: TextChannel = <TextChannel> await client.channels.fetch('751349307382431845');
     const logMessage = new MessageEmbed()
         .setTitle("Message deleted in #" + (<TextChannel>message.channel).name)
