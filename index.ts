@@ -219,7 +219,7 @@ setInterval(async () => {
         colors.forEach(color => member.roles.remove(color));
         member.roles.add(colors[Math.floor(Math.random() * colors.length)]);
     });
-}, 300000);
+}, 1200000);
 client.on('messageReactionAdd', (reaction, user) => {
     if(reaction.message.guild === mainGuild) return;
 
