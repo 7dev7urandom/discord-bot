@@ -4,6 +4,13 @@ const client = new Client();
 client.once('ready', () => {
     console.log("Client ready!");
     mainGuild = client.guilds.cache.get('710742381409861642'); // MSG students
+    client.user?.setPresence({
+        status: "online",
+        activity: {
+            type: "WATCHING",
+            name: "for !aaa"
+        }
+    })
 });
 var messageJson: any = {};
 var mainGuild: Guild | undefined;
