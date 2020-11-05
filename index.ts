@@ -15,7 +15,7 @@ client.once('ready', () => {
 var messageJson: any = {};
 var mainGuild: Guild | undefined;
 
-const blogId = '753790911044911116';
+const blogId = '750303283616153641';
 
 
 client.on("message", async message => {
