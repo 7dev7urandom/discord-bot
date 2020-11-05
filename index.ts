@@ -1,5 +1,6 @@
 import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild, PermissionOverwrites } from 'discord.js'; 
 import { get } from 'https';
+import { readFileSync } from 'fs';
 const client = new Client();
 client.once('ready', () => {
     console.log("Client ready!");
@@ -319,4 +320,4 @@ function getUserFromMention(mention: string) {
 		return client.users.cache.get(mention);
 	}
 }
-client.login('NzMwNzc4MDc0MjYxNDg3NzQ4.Xwce3w.N98cXlCAmoJL0dIToJFRoOO5qQE');
+client.login(JSON.parse(readFileSync('./config.json').toString('utf-8')).token);
