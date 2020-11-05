@@ -239,23 +239,23 @@ setInterval(() => {
             if(!currentNumOfPosts) {
                 currentNumOfPosts = data.found;
 
-                let desc: string = data.posts[0].excerpt;
-                desc = desc.replace("<p>", "");
-                desc = desc.replace("</p>", "");
-                desc = desc.replace("[&hellip;]", "");
+//                 let desc: string = data.posts[0].excerpt;
+//                 desc = desc.replace("<p>", "");
+//                 desc = desc.replace("</p>", "");
+//                 desc = desc.replace("[&hellip;]", "");
 
-                const embed = new MessageEmbed()
-                    .setTitle("New post: " + data.posts[0].title)
-                    .setAuthor(data.posts[0].author.name, data.posts[0].author.avatar_URL)
-                    .setDescription(desc)
-                    .setTimestamp(new Date(data.posts[0].date))
-                    .setColor('#0000aa')
-                    .setURL(data.posts[0].URL)
-                    .setImage(data.posts[0].featured_image)
-//                              http://familystudents.family.blog/2020/11/05/vergesssen/
-                    .setFooter("Automatically detected by a bot. Please report any issues");
+//                 const embed = new MessageEmbed()
+//                     .setTitle("New post: " + data.posts[0].title)
+//                     .setAuthor(data.posts[0].author.name, data.posts[0].author.avatar_URL)
+//                     .setDescription(desc)
+//                     .setTimestamp(new Date(data.posts[0].date))
+//                     .setColor('#0000aa')
+//                     .setURL(data.posts[0].URL)
+//                     .setImage(data.posts[0].featured_image)
+// //                              http://familystudents.family.blog/2020/11/05/vergesssen/
+//                     .setFooter("Automatically detected by a bot. Please report any issues");
 
-                (<TextChannel> await client.channels.cache.get(blogId)?.fetch()).send(embed);
+//                 (<TextChannel> await client.channels.cache.get(blogId)?.fetch()).send(embed);
                 return;
             }
             if(data.found > currentNumOfPosts) {
