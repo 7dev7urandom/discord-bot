@@ -1,4 +1,5 @@
 import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild, PermissionOverwrites } from 'discord.js'; 
+import { get } from 'https';
 const client = new Client();
 client.once('ready', () => {
     console.log("Client ready!");
@@ -6,6 +7,10 @@ client.once('ready', () => {
 });
 var messageJson: any = {};
 var mainGuild: Guild | undefined;
+
+const blogId = '753790911044911116';
+
+
 client.on("message", async message => {
     // console.log("message: " + message.content);
     if(message.guild === mainGuild) return;
@@ -220,6 +225,46 @@ setInterval(async () => {
         member.roles.add(colors[Math.floor(Math.random() * colors.length)]);
     });
 }, 1200000);
+
+let currentNumOfPosts: number;
+
+setInterval(() => {
+    get('https://public-api.wordpress.com/rest/v1.1/sites/familystudents.family.blog/posts?offset=0&number=1', res => {
+        let datastr = '';
+
+        res.on('data', chunk => datastr += chunk);
+
+        res.on('end', async () => {
+            let data = JSON.parse(datastr);
+            if(!currentNumOfPosts) {
+                currentNumOfPosts = data.found;
+                const embed = new MessageEmbed()
+                    .setTitle("New post: " + data.posts[0].title)
+                    .setAuthor(data.posts[0].author.name, data.posts[0].author.avatar_URL)
+                    .setDescription(data.posts[0].excerpt)
+                    .setTimestamp(new Date(data.posts[0].date))
+                    .setColor('#00a')
+                    .setFooter(data.posts[0].URL)
+                    .setImage(data.posts[0].featured_image);
+                (<TextChannel> await client.channels.cache.get(blogId)?.fetch()).send(embed);
+                return;
+            }
+            if(data.found > currentNumOfPosts) {
+                const embed = new MessageEmbed()
+                    .setTitle("New post: " + data.posts[0].title)
+                    .setAuthor(data.posts[0].author.name, data.posts[0].author.avatar_URL)
+                    .setDescription(data.posts[0].excerpt)
+                    .setTimestamp(new Date(data.posts[0].date))
+                    .setColor('#00a')
+                    .setFooter(data.posts[0].URL)
+                    .setImage(data.posts[0].featured_image);
+                (<TextChannel> await client.channels.cache.get(blogId)?.fetch()).send(embed);
+                currentNumOfPosts = data.found;
+            }
+        });
+    }).on('err', (err) => console.error("Error getting wordpress: " + err));
+}, 5000);
+
 client.on('messageReactionAdd', (reaction, user) => {
     if(reaction.message.guild === mainGuild) return;
 
