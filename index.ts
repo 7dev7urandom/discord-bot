@@ -2,7 +2,7 @@ import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmb
 import { get } from 'https';
 import { readFileSync } from 'fs';
 const client = new Client();
-client.once('ready', () => {
+client.once('ready', async () => {
     console.log("Client ready!");
     mainGuild = client.guilds.cache.get('710742381409861642'); // MSG students
     client.user?.setPresence({
@@ -11,7 +11,9 @@ client.once('ready', () => {
             type: "WATCHING",
             name: "for !aaa"
         }
-    })
+    });
+    const x = mainGuild?.channels.resolve('753790911044911116');
+    if (x) (<TextChannel> await x.fetch()).send("MSG bot loaded");
 });
 var messageJson: any = {};
 var mainGuild: Guild | undefined;
@@ -21,7 +23,7 @@ const blogId = '750303283616153641';
 
 client.on("message", async message => {
     // console.log("message: " + message.content);
-    if(message.guild === mainGuild) return;
+    if(!(message.guild === mainGuild)) return;
     if(message.content.startsWith("!export")) {
         if (message.member?.roles.cache.has('710759824396255252')) {
             message.channel.send(`Message export requested by ${message.member?.displayName}. Messages exporting!`);
@@ -320,4 +322,7 @@ function getUserFromMention(mention: string) {
 		return client.users.cache.get(mention);
 	}
 }
-client.login(JSON.parse(readFileSync('./config.json').toString('utf-8')).token);
+
+const token = JSON.parse(readFileSync('./config.json').toString('utf-8')).token;
+client.login(token);
+console.log("Authen with token: " + token);
