@@ -284,7 +284,8 @@ setInterval(() => {
                     .setFooter(data.posts[0].URL)
                     .setImage(data.posts[0].featured_image)
 //                              http://familystudents.family.blog/2020/11/05/vergesssen/
-                    .setFooter("Automatically detected by a bot. Please report any issues");
+                    .setFooter("Automatically detected by a bot. Please report any issues")
+                    .setURL(data.posts[0].URL);
                 (<TextChannel> await client.channels.cache.get(blogId)?.fetch()).send(embed);
                 currentNumOfPosts = data.found;
             }
