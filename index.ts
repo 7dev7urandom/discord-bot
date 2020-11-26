@@ -1,9 +1,10 @@
 import { Client, MessageAttachment, ChannelLogsQueryOptions, Message, MessageEmbed, TextChannel, Guild, PermissionOverwrites } from 'discord.js'; 
 import { get } from 'https';
 import { readFileSync } from 'fs';
+
+const client = new Client();
 try{
 
-    const client = new Client();
     client.once('ready', async () => {
         console.log("Client ready!");
         mainGuild = client.guilds.cache.get('710742381409861642'); // MSG students
@@ -312,19 +313,6 @@ try{
             .setFooter("ID: " + message.id);
         channel.send(logMessage);
     });
-    function getUserFromMention(mention: string) {
-        if (!mention) return;
-    
-        if (mention.startsWith('<@') && mention.endsWith('>')) {
-            mention = mention.slice(2, -1);
-    
-            if (mention.startsWith('!')) {
-                mention = mention.slice(1);
-            }
-    
-            return client.users.cache.get(mention);
-        }
-    }
     
     const token = JSON.parse(readFileSync('./config.json').toString('utf-8')).token;
     client.login(token);
@@ -333,4 +321,17 @@ try{
     // Error, exit with error so systemctl will restart
     console.error(e);
     process.exit(111);
+}
+function getUserFromMention(mention: string) {
+    if (!mention) return;
+
+    if (mention.startsWith('<@') && mention.endsWith('>')) {
+        mention = mention.slice(2, -1);
+
+        if (mention.startsWith('!')) {
+            mention = mention.slice(1);
+        }
+
+        return client.users.cache.get(mention);
+    }
 }
