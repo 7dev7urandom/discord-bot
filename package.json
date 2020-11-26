@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/node": "^14.0.20",
     "discord.js": "^12.2.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "typescript": "^3.9.6"
   }
 }
