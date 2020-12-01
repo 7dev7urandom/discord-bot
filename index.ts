@@ -274,9 +274,9 @@ try{
                 if(data.found > currentNumOfPosts) {
     
                     let desc: string = data.posts[0].excerpt;
-                    desc = desc.replace("<p>", "");
-                    desc = desc.replace("</p>", "");
-                    desc = desc.replace("[&hellip;]", "");
+                    desc = desc.replace("<p>", "").replace("</p>", "").replace(/\[&\w+;\]/g, "").replace("\n", "");
+                    // desc = decodeURIComponent(desc);
+                    desc = decodeEntities(desc).trim() + "...";
     
                     const embed = new MessageEmbed()
                         .setTitle("New post: " + data.posts[0].title)
@@ -334,4 +334,20 @@ function getUserFromMention(mention: string) {
 
         return client.users.cache.get(mention);
     }
+}
+function decodeEntities(encodedString: string) {
+    var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
+    var translate = {
+        "nbsp":" ",
+        "amp" : "&",
+        "quot": "\"",
+        "lt"  : "<",
+        "gt"  : ">"
+    };
+    return encodedString.replace(translate_re, function(match, entity: 'nbsp' | 'amp' | 'quot' | 'lt' | 'gt') {
+        return translate[entity];
+    }).replace(/&#(\d+);/gi, function(match, numStr) {
+        var num = parseInt(numStr, 10);
+        return String.fromCharCode(num);
+    });
 }
