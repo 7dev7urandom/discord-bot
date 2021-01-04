@@ -279,7 +279,7 @@ try{
                     desc = decodeEntities(desc).trim() + "...";
     
                     const embed = new MessageEmbed()
-                        .setTitle("New post: " + data.posts[0].title)
+                        .setTitle("New post: " + decodeEntities(data.posts[0].title))
                         .setAuthor(data.posts[0].author.name, data.posts[0].author.avatar_URL)
                         .setDescription(desc)
                         .setTimestamp(new Date(data.posts[0].date))
