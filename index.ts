@@ -351,3 +351,6 @@ function decodeEntities(encodedString: string) {
         return String.fromCharCode(num);
     });
 }
+client.on('error', (error) => {
+    console.error(error.message);
+});
