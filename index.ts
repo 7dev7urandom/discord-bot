@@ -138,6 +138,7 @@ try{
             const messageToSend = new MessageEmbed()
             .setColor('#caed05')
             .setTitle(`Poll by ${message.member?.displayName}:`)
+	    // dirty fix for vim `
             .setDescription(polltext);
             console.log("Adding poll: " + polltext);
             //@ts-ignore
@@ -293,7 +294,7 @@ try{
                     currentNumOfPosts = data.found;
                 }
             });
-        }).on('err', (err) => console.error("Error getting wordpress: " + err));
+        }).on('err', (err) => console.error("Error getting wordpress: " + err)).end();
     }, 5000);
     
     client.on('messageReactionAdd', (reaction, user) => {
