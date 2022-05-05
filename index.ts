@@ -206,6 +206,23 @@ try{
                 if ((channel.type !== 'category' || channel.id !== '710742381409861643') && channel.id !== '710742381409861645' && channel.id !== '753468247948656671') return;
                 channel.updateOverwrite('749869767527104513', { SEND_MESSAGES: null }, 'Enabling message send abilities for school people');
             });
+        } else if (message.content.startsWith('!blograndomize')) {
+            // Check author is admin
+            if(!message.member?.hasPermission('ADMINISTRATOR')) {
+                message.reply("You do not have permission to do that!");
+                return;
+            }
+            const ids = message.content.split(" ");
+            const debug = ids.shift()?.includes("debug");
+            const shuffleArray = shuffle(ids);
+            const shuffled = new Map<string, string>(shuffleArray.map((x, i) => [x, shuffleArray[(i + 1) % shuffleArray.length]]));
+            
+            if(debug) (client.channels.cache.get('753790911044911116') as TextChannel)?.send(`${Array.from(shuffled.entries()).map(x => `${x[0]} => ${x[1]}`).join("\n")}`);
+            for(const id of ids) {
+                // debugger;
+                const numberId = /(\d+)/.exec(id)![1];
+                (await message.guild.members.fetch(numberId)).send(`Your blog poem target is ${shuffled.get(id)}. Please post it on <undisclosed date>`);
+            }
         }
         // } else if (message.content.startsWith('!pol2')) {
         //     const pollsChannel = await client.channels.cache.get('749870145962508349');
@@ -232,13 +249,6 @@ try{
         //     message.delete();
         // }
     });
-    var colors = ['750606609574658058', '750606768354361356', '750606770497519647', '750606837455388713', '750606866165399565'];
-    setInterval(async () => {
-        [... (await mainGuild?.roles.cache.get('750606553177915443')?.members.array() || [])].forEach(member => {
-            colors.forEach(color => member.roles.remove(color));
-            member.roles.add(colors[Math.floor(Math.random() * colors.length)]);
-        });
-    }, 1200000);
     
     let currentNumOfPosts: number;
     
@@ -302,7 +312,7 @@ try{
     
     });
     client.on('messageDelete', async message => {
-        if(message.guild === mainGuild) return;
+        if(message.guild !== mainGuild) return;
     
         const channel: TextChannel = <TextChannel> await client.channels.fetch('751349307382431845');
         const logMessage = new MessageEmbed()
@@ -355,3 +365,20 @@ function decodeEntities(encodedString: string) {
 client.on('error', (error) => {
     console.error(error.message);
 });
+function shuffle(array: any[]) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
