@@ -221,7 +221,7 @@ try{
             for(const id of ids) {
                 // debugger;
                 const numberId = /(\d+)/.exec(id)![1];
-                (await message.guild.members.fetch(numberId)).send(`Your blog poem target is ${shuffled.get(id)}. Please post it on <undisclosed date>`);
+                (await message.guild.members.fetch(numberId)).send(`Your blog poem target is ${shuffled.get(id)}.`);
             }
         }
         // } else if (message.content.startsWith('!pol2')) {
