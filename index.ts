@@ -309,14 +309,15 @@ try {
                     "Enabling message send abilities for school people"
                 );
             });
-        } else if (message.content.startsWith("!blograndomize")) {
+        } else if (message.content.startsWith("!randomizelist")) {
             // Check author is admin
             if (!message.member?.hasPermission("ADMINISTRATOR")) {
                 message.reply("You do not have permission to do that!");
                 return;
             }
             const ids = message.content.split(" ");
-            const debug = ids.shift()?.includes("debug");
+            const debug = ids[0]?.includes("debug");
+            if(debug) ids.shift();
             const shuffleArray = shuffle(ids);
             const shuffled = new Map<string, string>(
                 shuffleArray.map((x, i) => [
@@ -324,7 +325,7 @@ try {
                     shuffleArray[(i + 1) % shuffleArray.length],
                 ])
             );
-
+            const messageTemplate = `Your Secret Santa person is %%! Sneak a gift into their locker on MSG week`
             if (debug)
                 (
                     client.channels.cache.get(
@@ -332,15 +333,17 @@ try {
                     ) as TextChannel
                 )?.send(
                     `${Array.from(shuffled.entries())
-                        .map((x) => `${x[0]} => ${x[1]}`)
+                        .map((x) => `${x[0]} => ${x[1]}: ${messageTemplate.replace("%%", x[1])}`)
                         .join("\n")}`
                 );
-            for (const id of ids) {
-                // debugger;
-                const numberId = /(\d+)/.exec(id)![1];
-                (await message.guild.members.fetch(numberId)).send(
-                    `Your blog poem target is ${shuffled.get(id)}.`
-                );
+            else {
+                for (const id of ids) {
+                    // debugger;
+                    const numberId = /(\d+)/.exec(id)![1];
+                    (await message.guild.members.fetch(numberId)).send(
+                        messageTemplate.replace("%%", shuffled.get(id)!)
+                    );
+                }
             }
         }
         // } else if (message.content.startsWith('!pol2')) {
