@@ -316,8 +316,8 @@ try {
                 return;
             }
             const ids = message.content.split(" ");
-            const debug = ids[0]?.includes("debug");
-            if(debug) ids.shift();
+            const debug = ids.shift()?.includes("debug"); // if the command !randomizelist includes debug do debug (!randomizelistdebug)
+            // if(debug) ids.shift();
             const shuffleArray = shuffle(ids);
             const shuffled = new Map<string, string>(
                 shuffleArray.map((x, i) => [
