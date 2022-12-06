@@ -324,7 +324,8 @@ try {
                 }
                 return true;
             }
-            while(!isValid()) shuffle(ids);
+            do shuffle(ids)
+            while(!isValid());
             const shuffled = new Map<string, string>(
                 ids.map((x, i) => [
                     x,
