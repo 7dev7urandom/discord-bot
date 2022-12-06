@@ -318,11 +318,17 @@ try {
             const ids = message.content.split(" ");
             const debug = ids.shift()?.includes("debug"); // if the command !randomizelist includes debug do debug (!randomizelistdebug)
             // if(debug) ids.shift();
-            const shuffleArray = shuffle(ids);
+            const isValid = function(): boolean {
+                for(let i = 0; i < ids.length; i++) {
+                    if(!/\d/.test(ids[i]) && ids[(i + 1) % ids.length].includes("494009206341369857")) return false;
+                }
+                return true;
+            }
+            while(!isValid()) shuffle(ids);
             const shuffled = new Map<string, string>(
-                shuffleArray.map((x, i) => [
+                ids.map((x, i) => [
                     x,
-                    shuffleArray[(i + 1) % shuffleArray.length],
+                    ids[(i + 1) % ids.length],
                 ])
             );
             const messageTemplate = `Your Secret Santa person is %%! Sneak a gift into their locker on MSG week`
@@ -339,10 +345,17 @@ try {
             else {
                 for (const id of ids) {
                     // debugger;
-                    const numberId = /(\d+)/.exec(id)![1];
-                    (await message.guild.members.fetch(numberId)).send(
-                        messageTemplate.replace("%%", shuffled.get(id)!)
-                    );
+                    const numberId = /(\d+)/.exec(id);
+                    if(numberId)
+                        (await message.guild.members.fetch(numberId[1])).send(
+                            messageTemplate.replace("%%", shuffled.get(id)!)
+                        );
+                    else 
+                        (client.channels.cache.get(
+                            "753790911044911116"
+                        ) as TextChannel
+                    )?.send(
+                        `${id} -> ${shuffled.get(id)}`);
                 }
             }
         }
