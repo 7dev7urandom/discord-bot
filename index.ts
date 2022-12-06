@@ -349,7 +349,7 @@ try {
                     try {
                         const numberId = /(\d+)/.exec(id);
                         if(numberId)
-                            (await message.guild.members.fetch(numberId[1])).send(
+                            await (await message.guild.members.fetch(numberId[1])).send(
                                 messageTemplate.replace("%%", shuffled.get(id)!)
                             );
                         else 
