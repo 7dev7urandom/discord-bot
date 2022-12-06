@@ -339,7 +339,7 @@ try {
                     ) as TextChannel
                 )?.send(
                     `${Array.from(shuffled.entries())
-                        .map((x) => `${x[0]} => ${x[1]}: ${messageTemplate.replace("%%", x[1])}`)
+                        .map((x) => `${x[0]} => ${x[1]}: ${"%%".replace("%%", x[1])}`)
                         .join("\n")}`
                 );
             else {
