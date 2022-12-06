@@ -346,17 +346,21 @@ try {
             else {
                 for (const id of ids) {
                     // debugger;
-                    const numberId = /(\d+)/.exec(id);
-                    if(numberId)
-                        (await message.guild.members.fetch(numberId[1])).send(
-                            messageTemplate.replace("%%", shuffled.get(id)!)
-                        );
-                    else 
-                        (client.channels.cache.get(
-                            "753790911044911116"
-                        ) as TextChannel
-                    )?.send(
-                        `${id} -> ${shuffled.get(id)}`);
+                    try {
+                        const numberId = /(\d+)/.exec(id);
+                        if(numberId)
+                            (await message.guild.members.fetch(numberId[1])).send(
+                                messageTemplate.replace("%%", shuffled.get(id)!)
+                            );
+                        else 
+                            (client.channels.cache.get(
+                                "753790911044911116"
+                            ) as TextChannel
+                        )?.send(
+                            `${id} -> ${shuffled.get(id)}`);
+                    } catch (e) {
+                        console.error(e, id, shuffled.get(id));
+                    }
                 }
             }
         }
